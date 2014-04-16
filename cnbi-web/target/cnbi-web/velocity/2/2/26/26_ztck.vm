@@ -1,0 +1,65 @@
+#parse("common/jpdbDimChange.vm")
+#parse("common/map.vm")
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 };
+</style>
+#foreach($dataList in $viewDatas)
+	#set($dim = $dataList.dim)
+	#set($data = $dataList.jpdbDatas)
+#end
+<div class="row">
+		#set($mapContentDomId='mapId')
+		#set($mapContent="<div id=${mapContentDomId}></div>")
+    	<div class="col-md-6">
+            #createCommonPanel($panelCss 'asterisk' '地图' $mapContent)
+        </div>
+		 #set($MSColumnLineContentDomId='msClolineId')
+		 #set($lineContent="<div id=${MSColumnLineContentDomId}></div>")
+        <div class="col-md-6" style="padding-left:3px;padding-right:3px;">
+			<div class="col-md-12">
+				#createCommonPanel($panelCss 'tree-deciduous' "<code>${dim.sname}</code>情况图" $lineContent)
+			</div>
+			<div class="col-md-12">
+				<div class="${panelCss}">
+					##<div class="panel-heading"><i class="glyphicon glyphicon-th"></i>${sname}<code>${dim.sname}</code>情况图</div>
+					##<div class="panel-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                              <td>国家或区域</td>
+							  <td>数量</td>
+							  <td>金额</code></td>
+							  <td>均价</td>
+							  <td>占比</td>
+							  <td>数量同比</td>
+							  <td>金额同比</td>
+							  <td>均价同比</td>
+                            </thead>
+        					<tbody>
+								#foreach($bean in $data)
+								<tr>
+									#if($velocityCount != $data.size())
+										<td>$bean.scode</td>
+									#else
+										<td>合计</td>
+									#end
+            						<td>$numberTool.format('###,##0',$bean.counts)</td>
+            						<td>$numberTool.format('###,##0.00',$bean.money)</td>
+            						<td>$numberTool.format('###,##0.00',$bean.aveprice)</td>
+									<td>$numberTool.format('percent',$bean.zb)</td>
+            						<td>$numberTool.format('###,##0.00',$bean.sltblv)</td>
+            						<td>$numberTool.format('###,##0.00',$bean.jetblv)</td>
+            						<td>$numberTool.format('###,##0.00',$bean.jjtblv)</td>
+								</tr>
+								#end
+        					</tbody>
+        				</table>
+					##</div>
+				##</div>
+			</div>
+        </div>
+<script >
+	new Cnbi.Page.Wx.Ztck({datas:$viewJsonDatas,viewChartArr:[{domId:"${mapContentDomId}",data:[],heigth:400,swf:"FCMap_World.swf",series:"map"},{domId:"${MSColumnLineContentDomId}",data:[],heigth:400,swf:"MSColumn3DLineDY.swf",series:"series"}]});
+</script>
+</div>

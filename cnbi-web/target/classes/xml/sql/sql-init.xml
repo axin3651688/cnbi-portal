@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 系统启动后将加载本文件 sql=items为模块Id+item的Id 例：用户登录的sql=Common.getSqlByKey(defaultsuser) 
+	debug为true时：即时刷新 为false时则只系统启动时加载一次 -->
+<cnbiSql id="sql" debug="false" name="sql语句集合">
+
+	<items id="default">
+		<item id="suser" name="用户登录" fomular="no">
+           <![CDATA[
+              SELECT * FROM SYS_User where suser = :suser
+           ]]>
+		</item>
+	</items>
+	<items id="menu">
+		<item id="list" name="查询菜单列表" fomular="no">
+           <![CDATA[
+              SELECT scode, sname, spcode, favicon,isleaf, nsort FROM SYS_Menus order by nsort
+           ]]>
+		</item>
+	</items>
+	<items id="init">
+	    <item id="license" name="查询系统上次登录的日志信息" fomular="no"> 
+	        <![CDATA[
+	            select top 1 logID as logId, tlogtime as loginTime  from SYS_Log  order by logID desc
+	        ]]>
+		</item>
+		<item id="subjectlist" name="查询所有主题" fomular="no"> 
+	        <![CDATA[
+	            SELECT scode, sname, csplit as split, sprefixdim as dim, sprefixfact as fact, sfacttable as factTable,spcode FROM DW_Subject where spcode <> '0'
+	        ]]>
+		</item>
+		<item id="composelist" name="查询主题所拥有的所有维度" fomular="no"> 
+	        <![CDATA[
+	            SELECT nid, sfactfield as field, sdimtable as factTable, sname, ctype as type, subject FROM DW_Compose  where subject = :subject
+	        ]]>
+		</item>
+		<item id="dim" name="查询所有维度" fomular="no"> 
+	        <![CDATA[
+                SELECT distinct sdimtable as scode  FROM DW_Compose where ctype='D'
+	        ]]>
+		</item>
+		<item id="dimfield" name="查询所有维度field-->名称对应的map" fomular="no"> 
+	        <![CDATA[
+                SELECT distinct sfactfield as scode,sname  FROM DW_Compose where ctype='D'
+	        ]]>
+		</item>
+		<item id="item" name="查询主题所拥有的所有维度" fomular="no"> 
+	        <![CDATA[
+                select scode,sname,spcode from :factTable
+	        ]]>
+		</item>
+		<item id="template" name="净利润公共sql" fomular="no">
+            <![CDATA[
+			select  :parentdimfield as spcode, :childdimfield as scode, sum(fact_A) as counts, sum(fact_B) as xssr, sum(fact_D) as jlre from DW_FactNetProfit where dim_period=:period and :helpdim group by :parentdimfield,:childdimfield order by :parentdimfield,:childdimfield
+			]]>
+		</item>
+	</items>
+	<items id="dash">
+		<item id="bean" name="查询有孩子的模型对象" fomular="no">
+           <![CDATA[
+            SELECT scode, sname, spcode,squery,nisleaf as isleaf,nisactive as isactive,subject  FROM SYS_Dashboard where spcode=:scode
+           ]]>
+		</item>
+		<item id="list" name="查询有孩子的模型对象" fomular="no">
+           <![CDATA[
+            SELECT scode, sname, spcode,squery,nisleaf as isleaf,nisactive as isactive,subject  FROM SYS_Dashboard
+           ]]>
+		</item>
+		<item id="query" name="查询数据" fomular="no">
+           <![CDATA[
+                select dim_company as company, dim_item as rowcode,dim_period as period, dim_column as colcode,scontent  from :factTable  where subject in (:subject) and dim_company in(:company) and dim_period in (:period) and dim_item in (:itemCode) and dim_column in(:columnCode) 
+           ]]>
+		</item>
+		<!-- MAX(CASE WHEN a.colcode=:colcode THEN scontent END) AS ":colcode" 
+			公共语法 -->
+		<!-- isnull(max(case a.colcode when '202' then scontent when null then 
+			0.00 end ),0.00) "202" sqlserver2005语法 -->
+		<item id="rowcolfun" name="查询数据行列转置时的条件" fomular="no">
+           <![CDATA[
+                isnull(max(case a.colcode when ':colcode' then scontent when null then '0.00' end ),'0.00')
+           ]]>
+		</item>
+	</items>
+	<items id="122">
+		<item id="0" name="虚拟利润" fomular="no">
+           <![CDATA[
+               	select  dim_Item as scode ,(select sname from DW_DimItem where scode =dim_Item) as sname,fact_B as syddWasher,fact_C as syddIcebox ,fact_D as syddLifeElectric,fact_E as rsdWasher,fact_F as rsdIcebox,fact_G as rsdLifeElectric  from DW_FactMarketCompany where dim_period=:period  order by dim_Item
+           ]]>
+		</item>
+		<item id="1" name="虚拟利润--渠道品类" fomular="no">
+           <![CDATA[
+              SELECT (select sname from DW_DimItem where scode =dim_Item) as sname,SUM("dlTotal") as "dlTotal",SUM("dlWasher") as "dlWasher",SUM("dlIcebox") as "dlIcebox",SUM("dlLifeElectric") as "dlLifeElectric",SUM("lsTotal") as "lsTotal",SUM("lsWasher") as "lsWasher",SUM("lsIcebox") as "lsIcebox",SUM("lsLifeElectric") as "lsLifeElectric",SUM("dsTotal") as "dsTotal",SUM("dsWasher") as "dsWasher",SUM("dsIcebox") as "dsIcebox",SUM("dsLifeElectric") as "dsLifeElectric",SUM("zbTotal") as "zbTotal",SUM("zbWasher") as "zbWasher",SUM("zbIcebox") as "zbIcebox",SUM("zbLifeElectric") as "zbLifeElectric"  FROM ( SELECT dim_item,"0004" as "dlTotal","0001" as "dlWasher","0002" as "dlIcebox","0003" as "dlLifeElectric",0 as "lsTotal",0 as "lsWasher",0 as "lsIcebox",0 as "lsLifeElectric",0 as "dsTotal",0 as "dsWasher",0 as "dsIcebox",0 as "dsLifeElectric",0 as "zbTotal",0 as "zbWasher",0 as "zbIcebox",0 as "zbLifeElectric"FROM ( SELECT dim_item, dim_bigcategory, sum(fact_D) as fact_D FROM  DW_FactChannel  WHERE  dim_period=:period and :helpdim  group by dim_item, dim_bigcategory) p pivot(MAX(fact_D) FOR dim_bigcategory IN ("0004","0001","0002","0003")) q   UNION ALL  SELECT dim_item,0 as "dlTotal",0 as "dlWasher",0 as "dlIcebox",0 as "dlLifeElectric","0004" as "lsTotal","0001" as "lsWasher","0002" as "lsIcebox","0003" as "lsLifeElectric",0 as "dsTotal",0 as "dsWasher",0 as "dsIcebox",0 as "dsLifeElectric",0 as "zbTotal",0 as "zbWasher",0 as "zbIcebox",0 as "zbLifeElectric"FROM ( SELECT dim_item, dim_bigcategory, sum(fact_J) as fact_J FROM  DW_FactChannel  WHERE  dim_period=:period and :helpdim group by dim_item, dim_bigcategory) p pivot(MAX(fact_J) FOR dim_bigcategory IN ("0004","0001","0002","0003")) q   UNION ALL  SELECT dim_item,0 as "dlTotal",0 as "dlWasher",0 as "dlIcebox",0 as "dlLifeElectric",0 as "lsTotal",0 as "lsWasher",0 as "lsIcebox",0 as "lsLifeElectric","0004" as "dsTotal","0001" as "dsWasher","0002" as "dsIcebox","0003" as "dsLifeElectric",0 as "zbTotal",0 as "zbWasher",0 as "zbIcebox",0 as "zbLifeElectric"FROM ( SELECT dim_item, dim_bigcategory, sum(fact_N) as fact_N FROM  DW_FactChannel  WHERE  dim_period=:period and :helpdim group by dim_item, dim_bigcategory) p pivot(MAX(fact_N) FOR dim_bigcategory IN ("0004","0001","0002","0003")) q   UNION ALL  SELECT dim_item,0 as "dlTotal",0 as "dlWasher",0 as "dlIcebox",0 as "dlLifeElectric",0 as "lsTotal",0 as "lsWasher",0 as "lsIcebox",0 as "lsLifeElectric",0 as "dsTotal",0 as "dsWasher",0 as "dsIcebox",0 as "dsLifeElectric","0004" as "zbTotal","0001" as "zbWasher","0002" as "zbIcebox","0003" as "zbLifeElectric"FROM ( SELECT dim_item, dim_bigcategory, sum(fact_A) as fact_A FROM  DW_FactChannel  WHERE  dim_period=:period and :helpdim  group by dim_item, dim_bigcategory) p pivot(MAX(fact_A) FOR dim_bigcategory IN ("0004","0001","0002","0003")) q  ) m GROUP BY  dim_item 
+           ]]>
+		</item>
+		<item id="2" name="虚拟利润--大区品类" fomular="no">
+           <![CDATA[
+              select Bigcategory as scode,dim_item as itemcode,"0001", "0002", "0003", "0004" from( select dim_region AS Region, dim_bigcategory as Bigcategory, dim_item, scontent from DW_FactCustomer unpivot(scontent for dim_item in (fact_A,fact_B,fact_C,fact_D,fact_E,fact_F,fact_G,fact_H,fact_I,fact_J,fact_K,fact_M,fact_N,fact_O,fact_P,fact_Q,fact_R,fact_S,fact_T,fact_U,fact_V)) y where  dim_Period=:period and :helpdim ) q pivot(max(scontent) for Region in ("0001", "0002", "0003", "0004") ) m
+           ]]>
+		</item>
+		<item id="3" name="虚拟利润--分公司品类" fomular="no">
+           <![CDATA[
+           SELECT  dim_branch as scode,(select sname from DW_DimBranch where dim_branch=scode) as sname,SUM(fact_A)+SUM(fact_D) AS yjWasher, SUM(fact_B)+SUM(fact_E) AS yjIcebox, SUM(fact_C)+SUM(fact_F) AS yjLifeElectric,SUM(fact_G) AS yjTotal,SUM(fact_H)+SUM(fact_K) AS cbWasher, SUM(fact_I)+SUM(fact_L) AS cbIcebox, SUM(fact_J)+SUM(fact_M) AS cbLifeElectric, SUM(fact_N) AS cbTotal, SUM(fact_O)+SUM(fact_R) AS lrWasher,SUM(fact_P)+SUM(fact_S) AS lrIcebox, SUM(fact_Q)+SUM(fact_T) AS lrLifeElectric, SUM(fact_U) AS lrTotal FROM   DW_FactBranch where dim_period=:period and :helpdim GROUP BY  dim_region,dim_branch ORDER BY dim_region,dim_branch
+           ]]>
+		</item>
+		<item id="4" name="虚拟利润--分公司项目--品类" fomular="no">
+           <![CDATA[
+           	select dim_item as sname,"0001" as washer, "0002" as icebox, "0003" as lifeElectric, "0001"+"0002"+"0003" as total from (select dim_bigcategory, dim_item, scontent from DW_FactCustomer unpivot(scontent for dim_item in (fact_A,fact_B,fact_C,fact_D,fact_E,fact_F,fact_G,fact_H,fact_I,fact_J,fact_K,fact_M,fact_N,fact_O,fact_P,fact_Q,fact_R,fact_S,fact_T,fact_U,fact_V)) y where dim_period=:period and :helpdim) q pivot(max(scontent) for dim_bigcategory in("0001", "0002", "0003")) t
+           ]]>
+		</item>
+	</items>
+	<items id="total">
+		<item id="21" name="内销总表" fomular="no">
+           <![CDATA[
+              select scode,item as sname,isnull(examineValue,0) as examineValue, isnull(reachValue,0) as reachValue, isnull(round(reachValue/nullif(examineValue, 0), 6),0) as reachPercent from(select scode,item, 0 as examineValue, reachValue from (  select 11 as scode ,'收入' as item, sum(fact_G) as reachValue from DW_FactIncomeShipping where dim_period=:period  union all  select 13 as scode ,'费用' as item, sum(fact_A) as reachValue from DW_FactPremiumCost where dim_period=:period   union all   select 121 as scode , '利润' as item,(select sum(fact_D) from DW_FactNetProfit where dim_period=:period  )+(select fact_A from DW_FactMarketCompany where dim_period=:period and dim_item='1001') as reachValue  union all   select  14 as scode , '存货' as item, sum(fact_A) as reachValue from DW_FactStock where dim_period=:period   union all  select  15 as scode , '在途' as item, sum(fact_A) as reachValue from DW_FactInTransit where dim_period=:period) q ) m
+           ]]>
+		</item>
+		<item id="22" name="外销总表" fomular="no">
+           <![CDATA[
+           select  scode,item as sname, khz  AS examineValue,isnull(dcz,0)  AS reachValue, isnull( ROUND(dcz/NULLIF(khz, 0), 6),0) AS reachPercent,isnull(tb,0)  AS tqb  from (select 21 as scode, '销售收入' as item, 0 as khz, sum(fact_E) as dcz, sum(fact_E)-sum(fact_SE) as tb from (select fact_E, 0 as fact_SE from DW_FactDetail where dim_period=:period  union all  select 0 as fact_E, fact_E as fact_SE from DW_FactDetail where dim_period=:lastPeriod) p  union all  select 22 as scode,  '净利润' as item, 0 as khz, sum(fact_Y) as dcz, sum(fact_Y)-sum(fact_SY) as tb from ( select fact_Y, 0 as fact_SY from DW_FactDetail where dim_period=:period  union all  select 0 as fact_Y, fact_Y as fact_SY from DW_FactDetail where dim_period=:lastPeriod) q  union all  select  23 as scode, '出口销售费用' as item, 0 as khz, sum(fact_R) as dcz, sum(fact_R)-sum(fact_SR) as tb from (select fact_R, 0 as fact_SR from DW_FactSalesCost where dim_period=:period  union all select 0 as fact_R, fact_R as fact_SR from DW_FactSalesCost where dim_period=:lastPeriod  ) r  union all select  24 as scode, '呆滞存货' as item, 0 as khz, sum(fact_A) as dcz, sum(fact_A)-sum(fact_SA) as tb from  (select fact_A, 0 as fact_SA from DW_FactInventory where dim_period=:period  union all  select 0 as fact_A, fact_A as fact_SA from DW_FactInventory where dim_period=:lastPeriod  ) s  union all  select  25 as scode, '逾期应收' as item, 0 as khz, sum(sums) as dcz, sum(ssums) as tb from (select (fact_C+fact_D+fact_E+fact_F+fact_G) as sums, 0 as ssums from DW_FactReceivable where dim_period=:period  union all  select 0 as sums, (fact_C+fact_D+fact_E+fact_F+fact_G) as ssums from DW_FactReceivable where dim_period=:lastPeriod) t)x
+           ]]>
+		</item>
+	</items>
+</cnbiSql>

@@ -1,0 +1,38 @@
+#macro(isnull $value)
+				#if($value)
+					 $numberTool.format('###,##0.00',$value)
+			    #else
+					0.00
+				#end	
+			#end	
+
+##<h2 ><code >${sname}</code></h2>
+#parse("common/common.vm")
+#*
+<ul class="breadcrumb container" style="margin-top:0px">
+    <li class="" style="margin-left:10px;"><i class="glyphicon glyphicon-home"></i>&nbsp;当前位置：</li>
+     <li class="active">${sname}</li>
+</ul>
+#foreach($data in $mapData.entrySet())
+       ${data.key}      ${data.value}
+#end
+
+*#
+#if($dimMap)
+	#parse("common/dashDimChange.vm")
+#end	
+<script src="${resourcePath}js/2/${viewUtil}.js"></script>
+<script src="${resourcePath}js/${viewName}.js"></script>
+#if($paramBean.currentpagedimmap)
+	#set($parenttip = $allDimMap.get($paramBean.currentpagedimmap.get('parentdimfield')))
+	#set($childtip =  $allDimMap.get($paramBean.currentpagedimmap.get('childdimfield')))
+	#set($currentpagetip =$parenttip +'&'+$childtip)
+#end
+#if($paramBean.nextpagedimmap)
+	#set($nextpagedimtip =  $allDimMap.get($paramBean.nextpagedimmap.get('parentdimfield'))+'&'+$allDimMap.get($paramBean.nextpagedimmap.get('childdimfield')))
+#end	
+#parse("${viewName}.vm")
+<script >
+$("a[data-toggle=tooltip]").tooltip();
+</script>
+

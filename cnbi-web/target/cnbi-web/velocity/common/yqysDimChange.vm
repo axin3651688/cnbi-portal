@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="container" style="padding-left:15px;">
+		<div class="${panelCss}">
+			<div class="panel-heading"><i class="glyphicon glyphicon-tree-deciduous">维度切换</i></div>
+			<div class="panel-body">
+				<div class="btn-group btn-group-justified">
+                    <button type="button" class="btn btn-default " style="width: 25%">
+						<a href="javascript:;" id="depart" data-toggle="tooltip" data-placement="bottom" title="点击[部门]切换成【部门】"><code>部门</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 25%">
+						<a href="javascript:;" id="jsfs" data-toggle="tooltip" data-placement="bottom" title="点击[结算方式]切换成【结算方式】"><code>结算方式</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 25%">
+						<a href="javascript:;" id="sale" data-toggle="tooltip" data-placement="bottom" title="点击[业务员]切换成【业务员】"><code>业务员</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 25%">
+						<a href="javascript:;" id="customer" data-toggle="tooltip" data-placement="bottom" title="点击[客户]切换成【客户】"><code>客户</code></a></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${resourcePath}js/2/2/25/common.js"></script>

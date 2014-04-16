@@ -1,0 +1,15 @@
+#set($path = $request.getContextPath())
+#set($basePath = $request.getScheme()+"://"+$request.getServerName()+":"+$request.getServerPort()+$path+"/")
+#set($resourcePath = $basePath+"resources/")
+#set($bootstrapPath = $resourcePath+"bootstrap3.0.3/")
+#set($css = $!session.getAttribute("css") )
+#set($panelCss = 'panel panel-'+${css})
+#set($nav = ${ctx}+"main.cnbi?scode=")
+#set($suser = $!session.getAttribute("suser"))
+##<link href="${resourcePath}/bootstrap/css/bootstrap.css" rel="stylesheet">	
+##当变量未RHS of #set statement is null. Context will not be modified. templates/plugins/jira/portlets/twodimensionalfilterstats.vm [line 4, column 1
+#if($theme)
+#else
+	#set($theme="bootstrap")
+#end
+#set($isAdmin = $suser.cisadmin)

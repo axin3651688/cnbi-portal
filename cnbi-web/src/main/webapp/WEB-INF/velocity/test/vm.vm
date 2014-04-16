@@ -1,0 +1,47 @@
+#parse("common/common.vm")
+<!DOCTYPE HTML>
+<html en="zh_CN">
+	<head >
+		  <title>中国人</title>
+    </head>
+<body>
+
+${message}
+<div >
+	  $request
+	  <hr>
+	  $response
+	   <hr>
+	  $session
+	   <hr>
+		$springMacroRequestContext
+		<hr>
+			$rc
+		<hr>
+		$pageContext.request.contextPath
+		<hr>
+			$ctx
+	 <hr/>
+	   #set($value = $numberTool.format(1258563963.36))
+       <div>$value</div>
+	    <div> $numberTool.format(1258563963.36)</div>
+		<hr>
+		$toytool.message
+</div>
+<div>
+	$path
+	
+</div>
+<div>
+	$basePath
+</div>
+<hr />
+<div>
+	$paramName
+	
+	$dateTool.format("yyyy-MM-dd",${dates})
+</div>
+
+</body>
+</html>
+<hr>

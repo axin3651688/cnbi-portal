@@ -1,0 +1,4 @@
+<link rel="stylesheet" type="text/css"href="${basePath}resource/js/easyui/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css"href="${basePath}resource/js/easyui/themes/icon.css">
+<script type="text/javascript"src="${basePath}resource/js/easyui/jquery.easyui.min.me.js"></script>
+<script type="text/javascript"src="${basePath}resource/js/easyui/locale/easyui-lang-zh_CN.js"></script>

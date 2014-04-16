@@ -1,0 +1,17 @@
+var Utils = {};##定义全局工具对象
+#set($reportCode = '1000')
+#set($tableName = 'DW_FactFinance_GY')##默认为工业的
+Utils["user"]={reportCode:'1000',isAdmin:"${isAdmin}",name:"${suser.suser}"};
+Utils["index"]='index';
+Utils.basePath = "${basePath}";
+Utils.resourcePath = "${resourcePath}";
+Utils.css = "${css}";
+Utils["nav"] ="${nav}";
+Utils["pageBean"] ={text:"${pageBean.sname}",id:"${pageBean.scode}"};
+Utils["companyKey"] = Utils["user"]["name"]+Utils["pageBean"]["pageScode"];
+Utils["yearKey"] =  Utils["companyKey"]+"year";
+Utils["monthKey"] = Utils["companyKey"]+"month";
+Utils["unitKey"] =  Utils["companyKey"]+"unit";
+var pageBean={};
+
+

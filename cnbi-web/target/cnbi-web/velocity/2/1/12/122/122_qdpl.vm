@@ -1,0 +1,86 @@
+<style>.rowspanLh{line-height:30px;}</style>
+<div class="container">
+<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>&nbsp;&nbsp;虚拟利润<code>${currentpagetip}</code>指标分析表</div>
+        <div class="panel-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr rowspan="2">
+           ## <th></th>
+            <th rowspan="2"><p class="text-center rowspanLh">项目<p></th>
+            <th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0002_BigChannel',text:'代理',level:${paramBean.level},url:'qdpl_dqpl',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【代理】>>${nextpagedimtip}表数据">代理</a>	
+			</th>
+            <th colspan="4">
+			   <a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0001_BigChannel',text:'连锁',level:${paramBean.level},url:'qdpl_dqpl',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【连锁】>>${nextpagedimtip}表数据">连锁</a>	
+			</th>
+			<th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0003_BigChannel',text:'电商',level:${paramBean.level},url:'qdpl_dqpl',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【电商】>>${nextpagedimtip}表数据">电商</a>	
+			</th>
+			<th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0004_BigChannel',text:'总部',level:${paramBean.level},url:'qdpl_dqpl',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【总部】>>${nextpagedimtip}表数据">总部</a>	
+			</th>
+          </tr>
+		  <tr>
+            <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			<th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+          </tr>
+        </thead>
+        <tbody>
+			 #foreach($bean in $viewDatas)
+				##if($velocityCount == 1)
+					#*	private double allTotal;
+					    private double allWasher;
+                    	private double allIcebox;
+                    	private double allLifeElectric;
+						
+						 *  合计, Total
+						          洗衣机, Washer
+                         *  冰箱,  Icebox
+                         *  生活电器,LifeElectric
+                       
+					*#	
+				  <tr>
+					<th title="$bean.get("sname")">$bean.get("sname")</th>
+					##代理
+                   	    <td>$numberTool.format('###,##0.00',$bean.get("dlTotal"))</td>
+        				<td>$numberTool.format('###,##0.00',$bean.get("dlWasher"))</td>
+						<td>$numberTool.format('###,##0.00',$bean.get("dlIcebox"))</td>
+						<td>$numberTool.format('###,##0.00',$bean.get("dlLifeElectric"))</td>
+					## 连锁
+					 <td>$numberTool.format('###,##0.00',$bean.get("lsTotal"))</td>
+                     <td>$numberTool.format('###,##0.00',$bean.get("lsWasher"))</td>
+					<td>$numberTool.format('###,##0.00',$bean.get("lsIcebox"))</td>
+					<td>$numberTool.format('###,##0.00',$bean.get("lsLifeElectric"))</td>
+                	##电商	
+					 <td>$numberTool.format('###,##0.00',$bean.get("dsTotal"))</td>
+                     <td>$numberTool.format('###,##0.00',$bean.get("dsWasher"))</td>
+					 <td>$numberTool.format('###,##0.00',$bean.get("dsIcebox"))</td>
+					 <td>$numberTool.format('###,##0.00',$bean.get("dsLifeElectric"))</td>
+					 
+					 ##总部	
+					 <td>$numberTool.format('###,##0.00',$bean.get("zbTotal"))</td>
+                     <td>$numberTool.format('###,##0.00',$bean.get("zbWasher"))</td>
+					 <td>$numberTool.format('###,##0.00',$bean.get("zbIcebox"))</td>
+					 <td>$numberTool.format('###,##0.00',$bean.get("zbLifeElectric"))</td>
+				  </tr>	
+			 #end	
+        </tbody>
+      </table>
+        </div>
+ </div>		
+        </div>

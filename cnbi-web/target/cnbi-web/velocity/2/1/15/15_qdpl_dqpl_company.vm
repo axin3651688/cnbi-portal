@@ -1,0 +1,63 @@
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 }
+</style>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+		    <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>${sname}<code>${currentpagetip}</code>分析表</div>
+				<div class="panel-body">
+	                <table class="table table-striped table-bordered" id="nxztTable">
+					    <thead>
+							<tr>
+								<th rowspan="2">$parenttip</th>
+								<th rowspan="2">$childtip</th>
+								<th rowspan="2">总在途</th>
+								<th colspan="4">超期在途</th>
+								<th colspan="3">与上月环比</th>
+								<th colspan="3">与上年年底同比</th>
+							</tr>
+							<tr>
+								<td class="centerTd">其中：超60天在途</td>
+								<td class="centerTd">60天超期率</td>
+								<td class="centerTd">其中：超90天在途</td>
+								<td class="centerTd">90天超期率</td>
+								<td class="centerTd">总在途</td>
+								<td class="centerTd">超60天在途</td>
+								<td class="centerTd">超90天在途</td>
+								<td class="centerTd">总在途</td>
+								<td class="centerTd">超60天在途</td>
+								<td class="centerTd">超90天在途</td>
+							</tr>
+						</thead>
+						<tbody>
+		                    #foreach($bean in $viewDatas)
+			               ##foreach($row in $bean.nxztDatas)
+				            <tr>
+				                #if($velocityCount == 1)
+				                <th rowspan="$bean.tempSize">
+        				            ${bean.tempName}	
+			                    </th>
+				                #end
+				               <th><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${bean.scode}_branch',text:'${bean.sname}',level:${paramBean.level},url:'qdpl_dqpl_company_customer',nextpagedimtip:'${nextpagedimtip}'});"  data-toggle="tooltip" data-placement="right" title="点击可进入【${bean.sname}】>>${nextpagedimtip}表数据">${bean.sname}</a></th>
+							   <td>#isnull(${bean.dqzzt})</td>
+				               <td>#isnull(${bean.dqls})</td>
+				               <td>#isnull(${bean.dqlsl})</td>
+				               <td>#isnull(${bean.dqjs})</td>
+							   <td>#isnull(${bean.dqjsl})</td>
+				               <td>#isnull(${bean.syzzt})</td>
+				               <td>#isnull(${bean.syls})</td>
+				               <td>#isnull(${bean.syjs})</td>
+							   <td>#isnull(${bean.snzzt})</td>
+							   <td>#isnull(${bean.snls})</td>
+							   <td>#isnull(${bean.snjs})</td>
+				           </tr>	
+			               ##end
+		                   #end	
+                        </tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+</div>

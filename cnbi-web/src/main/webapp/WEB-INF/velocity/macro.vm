@@ -1,0 +1,103 @@
+##创建combox  class="input-xlarge"
+#macro(createSelect $name $list)
+	<select  name="$name" style="width:100%;" #if($pageBean.scode.contains("table") && $name == 'company')size="12" title="选择方式与excel的类似" multiple="multiple"#end>
+		  #if($name == "year")
+			    #foreach($itemIndex in [2012..2014])
+    				<option value="$itemIndex">$itemIndex年</option>
+    			#end
+		  #elseif($name == "month")
+			   #foreach($itemIndex in [1..12])
+    					    <option value="$itemIndex">$itemIndex月份</option>
+    		   #end
+		  #elseif($name == "unit")	
+			  <option value="1">元</option>
+              <option value="2">千元</option>
+              <option value="3">万元</option>
+              <option value="4">亿元</option>
+		  #else
+			#foreach($obj in ${list})
+				#set($scode = $obj.scode)
+				#set($sname = $obj.sname)
+				#set($spcode = $obj.spcode)
+			   <option value="${scode}" spcode="${spcode}">${sname}</option>
+		    #end
+		  #end 	
+	</select>
+#end
+##创建Pane函数
+#macro(createCommonPanel $class $icon $title $content)
+	 <div class="$class">
+    	 <div class="panel-heading" ><i class="glyphicon glyphicon-$icon"></i>&nbsp;<span>$title</span></div>
+         <div class="panel-body">
+    		 $content
+        </div>
+     </div>
+#end
+##创建Pane函数
+#macro(createPanel $panel )
+	 <div class="panel-heading" ><i class="glyphicon glyphicon-tree-deciduous"></i>&nbsp;$panel.getTitle()</div>
+     <div class="panel-body" style="height: $panel.getHei();" >
+		 #set($domId = "div")
+		 #if($panel.getContent().equals("table"))
+			  #set($domId = "table")
+		 #end
+		 #if($panel.getContent() && $panel.getContent().contains("map"))
+			  #set($hasMap = true)
+		 #end
+		 #set($style = "height: $panel.getHei()")
+		 #if($domId == "table")
+			  #set($style = "")
+		 #end	
+		<$domId id="${panel.getContent()}Id" style="${style}"></$domId>
+    </div>
+#end
+##创建PanelList函数
+#macro( createPanelList $panelList $regionMode $size)
+	  #foreach($panel in $panelList)
+		    #set($class = "")
+		    #if($regionMode=="horizontal")##如果是水平布局 那么panel与panel之间则是左右关系 ，则必须要有宽度设置  width  或者weight
+			  #set($class = "col-md-"+$panel.getWeight())
+			#else
+				  #set($class = "panel panel-"+${css})
+			#end
+			#if( $size == 1)
+				  #set($class =$class+ " panel panel-"+${css})
+			#end
+			<div class="$class" style="$panel.getStyle();height: $panel.getHeight();">
+				    #createPanel($panel)
+			</div>	
+		   
+	 #end
+#end	
+##创建模型sheet函数
+#macro(createSheet $sheet)
+	    #set($sheet_v = false)
+	    #set($sheet_v  = $sheet.getMode())
+	    #set($regionList = $sheet.getRegionList())	
+		 #set($regionSize = $regionList.size() )	
+	    #foreach($region in $regionList)#set($regionMode = false)
+			  #set($regionMode = false)
+			  #set($regionMode = $region.getMode() )
+			  #set($panelList = $region.getPanelList())
+			 ##如果是水平布局 那么region与region之间则是左右关系 ，则必须要有宽度设置  width  或者weight
+			  #if($sheet_v=="horizontal")
+				<div style="$region.getStyle()" class="row">
+				   #if($regionSize == 1)
+					    ##<div style="$region.getStyle()" class="row">
+					    #createPanelList($panelList $regionMode  1)
+                      ## </div>
+				   #else
+					  <div style="$region.getStyle()" class="col-md-$region.getWeight()">
+					   #createPanelList($panelList $regionMode)
+                      </div>
+					#end
+                </div>
+			  #else##垂直布局
+			      <div style="$region.getStyle()" class="row">
+				   #createPanelList($panelList $regionMode)
+				  </div>	
+			  #end	
+		#end
+#end
+
+	

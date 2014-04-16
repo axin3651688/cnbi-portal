@@ -1,0 +1,50 @@
+#parse("common/jpdbDimChange.vm")
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 };
+</style> 
+#foreach($dataList in $viewDatas)
+	#set($dim = $dataList.dim)
+	#set($data = $dataList.jpdbDatas)
+#end
+<div class="row">
+	#set($funnelContentDomId='funnelId')
+	#set($funnelContent="<div id=${funnelContentDomId}></div>")
+	<div class="col-md-4">
+        #createCommonPanel($panelCss 'asterisk' $dim.sname $funnelContent)
+    </div>
+
+    <div class="col-md-8">
+		<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th">$dim.sname</i></div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
+				<thead>
+					<td>企业名称</td>
+                    <td>数量<code>(本期)</code></td>
+                    <td>金额<code>(本期)</code></td>
+                    <td>单价<code>(本期)</code></td>
+					<td>数量同比</td>
+					<td>金额同比</td>
+					<td>均价同比</td>
+                </thead>
+				#foreach($bean in $data)
+                    <tr>
+                        <td>$bean.scode</td>
+						<td>$numberTool.format('###,##0',$bean.counts)</td>
+						<td>$numberTool.format('###,##0.00',$bean.money)</td>
+						<td>$numberTool.format('###,##0.00',$bean.aveprice)</td>
+						<td>$numberTool.format('###,##0.00',$bean.sltblv)</td>
+						<td>$numberTool.format('###,##0.00',$bean.jetblv)</td>
+						<td>$numberTool.format('###,##0.00',$bean.jjtblv)</td>
+					</tr>
+				#end
+  			</table>
+        </div>
+     </div>
+    </div>
+</div>
+<script >
+	new Cnbi.Page.Wx.Jppm({datas:$viewJsonDatas,viewChartArr:[{domId:"${funnelContentDomId}",data:[],heigth:460,swf:"Funnel.swf",dim:'counts'}]});
+</script>

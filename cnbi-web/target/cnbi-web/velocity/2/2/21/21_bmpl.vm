@@ -1,0 +1,85 @@
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 };
+</style> 
+
+<div class="container" style="margin-left: -15px">
+	#set($pieContentDomId= $paramBean.sqlKey+'pieId')
+	#set($pieContent="<div id=${pieContentDomId}></div>")
+	<div class="col-md-6">
+        #createCommonPanel($panelCss 'asterisk' '饼图' $pieContent)
+    </div>
+	 #set($lineContentDomId=$paramBean.sqlKey+'lineId')
+	  #set($lineContent="<div id=${lineContentDomId}></div>")
+    <div class="col-md-6" style="padding-left:3px;padding-right:3px;">
+		#createCommonPanel($panelCss 'tree-deciduous' "趋势图" $lineContent)
+    </div>
+</div>
+
+<div class="container">
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i><code>${sname}</code>指标分析表</div>
+        <div class="panel-body">
+                <table class="table table-bordered table-striped">
+					<thead>
+                      <tr>
+                        <td rowspan="2" align="center" class="rowspanLh">部门</td>
+						<td rowspan="2" align="center" class="rowspanLh">品类</td>
+                        <td rowspan="2" align="center">任务</td>
+                        <td colspan="3" align="center"><a href="javascript:;" class="clickToChart" id="fhwce" data-toggle="tooltip" data-placement="bottom" title="点击切换成【发货】数据">发货</a></td>
+                        <td colspan="3" align="center"><a href="javascript:;" class="clickToChart" id="kpwce" data-toggle="tooltip" data-placement="bottom" title="点击切换成【开票】数据">开票</a></td>
+                        <td colspan="3" align="center">回款</td>
+                      </tr>
+                      <tr>
+                       ## <td>结构占比</td>
+                        <td>完成额</td>
+                        <td>完成率</td>
+                        <td>同比</td>
+                        ##<td>结构占比</td>
+                        <td>完成额</td>
+                        <td>完成率</td>
+                        <td>同比</td>
+                        <td>完成额</td>
+                        <td>完成率</td>
+                        <td>同比</td>
+                      </tr>
+					</thead>
+					<tbody>
+						#foreach($dataList in $viewDatas)
+							#set($dim = $dataList.dim)
+							#set($data = $dataList.xssrDatas)
+							
+    						#foreach($bean in $data)
+    						  <tr>
+								#if($velocityCount == 1)
+    							<td rowspan="4"><p class="text-center rowspanLh"><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${dim.scode}_${dim.field}',text:'客户&品类',level:2,url:'khpl'});"  
+							data-toggle="tooltip" data-placement="right" title="点击[${dim.sname}]可进入“客户&品类”表数据">${dim.sname}</a></p></td>
+								#end
+								<th><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${bean.scode}_${dim.field}',text:'业务员&品类',level:2,url:'salepl'});"  
+							data-toggle="tooltip" data-placement="right" title="点击[${bean.sname}]可进入“业务员&品类”表数据">$bean.sname</a></th>
+    							<td></td>
+    							##<td>$numberTool.format('###,##0.00',$bean.fhjgtb)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.fhwce)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.fhwclv)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.fhtb)</td>
+                              ##  <td>$numberTool.format('###,##0.00',$bean.kpjgtb)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.kpwce)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.kpwclv)</td>
+                                <td>$numberTool.format('###,##0.00',$bean.kptb)</td>
+                                #if($velocityCount == 1)
+                                    <td rowspan="4">$numberTool.format('###,##0.00',$bean.hkpwce)</td>
+                                    <td rowspan="4">$numberTool.format('###,##0.00',$bean.hkwclv)</td>
+                                    <td rowspan="4">$numberTool.format('###,##0.00',$bean.hktb)</td>
+    							#end
+                              </tr>
+    						#end
+					#end
+                    </tbody>
+      			 </table>
+        </div>
+    </div>
+</div>
+<script>
+	pageBean["XssrDepart"] = new Cnbi.Page.Wx.XssrDepart({datas:$viewJsonDatas,viewChartArr:[{domId:"${pieContentDomId}",data:[],heigth:250,swf:"Pie2D",dim:'fhwce',hasLink:true},{domId:"${lineContentDomId}",data:[],heigth:250,swf:"MSLine",dim:[{scode:'fhwclv',sname:"发货"},{scode:'kpwclv',sname:"开票"}],series:"seriesL"}]});
+</script>

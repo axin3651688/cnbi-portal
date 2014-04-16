@@ -1,0 +1,58 @@
+<style > .rowspanLh{ line-height:120px;}</style>    
+	<div class="container" >
+		#set($pieContentDomId='pieId')
+		#set($pieContent="<div id=${pieContentDomId}></div>")
+    	<div class="col-md-6" style="padding-left:0px;">
+            #createCommonPanel($panelCss 'asterisk' '数量(件)' $pieContent)
+        </div>
+		 #set($lineContentDomId='lineId')
+		  #set($lineContent="<div id=${lineContentDomId}></div>")
+        <div class="col-md-6" style="padding-left:3px;padding-right:3px;">
+    		#createCommonPanel($panelCss 'tree-deciduous' "净利润率" $lineContent)
+		 
+        </div>
+	 </div>
+	 <div class="container" style="padding-left:15px;">
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>净利润<code>${currentpagetip}</code>分析表&nbsp;&nbsp;<code><small>(提示：单击上面的饼图可钻取右边的线图会变哦！)</small></code></div>
+        <div class="panel-body">
+                <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+           ## <th></th>
+             <th>$parenttip</th>
+            <th>$childtip</th>
+            <th><a href="javascript:;" class="clickToChart" id="counts" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【数量(件)】数据">数量(件)</a></th>
+            <th><a href="javascript:;" class="clickToChart" id="xssr" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【销售收入(万元))】数据">销售收入(万元)</a></th>
+			<th><a href="javascript:;" class="clickToChart" id="jlre" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【${sname}额(万元)】数据">净利润额(万元)</a></th>
+				<th>净利润率(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+		   #foreach($bean in $viewDatas)
+			#set($dim = $bean.dim)
+			#foreach($row in $bean.datas)
+				<tr>
+				#if($velocityCount == 1)
+				  <th rowspan=$bean.datas.size()>
+        				<p class="text-center rowspanLh">
+        				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${dim.scode}_${dim.field}',text:'${dim.sname}',level:${paramBean.level},url:'${paramBean.view}_dqpl',nextpagedimtip:'${nextpagedimtip}'});"  data-toggle="tooltip" data-placement="right" title="点击可进入【${dim.sname}】>>${nextpagedimtip}表数据">${dim.sname}</a>	
+        				</p>
+			      </th>
+				#end
+				  <th>${row.sname}</th>
+				  <td>$numberTool.format('###,##0',${row.counts})</td>
+				  <td>$numberTool.format('###,##0.00',${row.xssr})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlre})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlrv})%</td>
+				</tr>	
+			#end
+		  #end		
+        </tbody>
+      </table>
+        </div>
+      </div>
+	  </div>
+	  <script >
+		  pageBean["jlrQdpl"] = new Cnbi.Page.Nx.JlrQdpl({datas:$viewJsonDatas,viewChartArr:[{hasLink:true,domId:"${pieContentDomId}",data:[],heigth:250,swf:"Pie2D",dim:'counts'},{hasLink:false,domId:"${lineContentDomId}",data:[],heigth:250,swf:"Line",dim:'jlrv'}]});
+	   </script>

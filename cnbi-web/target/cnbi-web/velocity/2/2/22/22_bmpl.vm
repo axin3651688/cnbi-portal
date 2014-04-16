@@ -1,0 +1,63 @@
+##<h3 id="panels-heading">利润 >> 净利润</h3>
+   ## <p>用<code>.panel-heading</code>可以简单地加入一个标题容器。您也可以用<code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>和<code>.panel-title</code>类加入预定义样式的标题。</p>
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 }
+</style>    
+	<div>
+		#set($pieContentDomId='pieId')
+		#set($pieContent="<div id=${pieContentDomId}></div>")
+    	<div class="col-md-6">
+            #createCommonPanel($panelCss 'asterisk' '数量(件)' $pieContent)
+        </div>
+		 #set($lineContentDomId='lineId')
+		  #set($lineContent="<div id=${lineContentDomId}></div>")
+        <div class="col-md-6" style="padding-left:3px;padding-right:3px;">
+    		#createCommonPanel($panelCss 'tree-deciduous' "${sname}率" $lineContent)
+		 
+        </div>
+	 </div>
+	 <div class="container" style="padding-left:15px;">
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>${sname}<code>部门与品类</code>分析表</div>
+        <div class="panel-body">
+                <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>部门</th>
+            <th>品类</th>
+            <th><a href="javascript:;" class="clickToChart" id="counts" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【数量(件)】">数量(件)</a></th>
+            <th><a href="javascript:;" class="clickToChart" id="xssr" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【销售收入(万元))】数据">销售收入(万元)</a></th>
+			<th><a href="javascript:;" class="clickToChart" id="jlre" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【${sname}额(万元)】数据">${sname}额(万元)</a></th>
+			<th>${sname}率(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+		  #foreach($bean in $viewDatas)
+			#set($dim = $bean.dim)
+			#foreach($row in $bean.datas)
+				<tr>
+				#if($velocityCount == 1)
+				  <th rowspan="4">
+					<p class="text-center rowspanLh"><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${dim.scode}_${dim.field}',text:'客户&品类',level:2,url:'khpl'});"  
+							data-toggle="tooltip" data-placement="right" title="点击[${dim.sname}]可进入“客户&品类”表数据">${dim.sname}</a></p>
+			      </th>
+				#end
+				  <th><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~${row.scode}_BigCategory',text:'业务员&品类',level:3,url:'salepl'});"  
+							data-toggle="tooltip" data-placement="right" title="点击[${row.sname}]可进入“业务员&品类”表数据">${row.sname}</a></th>
+				  <td>$numberTool.format('###,##0',${row.counts})</td>
+				  <td>$numberTool.format('###,##0.00',${row.xssr})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlre})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlrv})%</td>
+				</tr>	
+			#end
+		  #end	
+        </tbody>
+      </table>
+        </div>
+      </div>
+	  </div>
+<script> 
+     pageBean["JlrDepart"] = new Cnbi.Page.Wx.JlrDepart({datas:$viewJsonDatas,viewChartArr:[{domId:"${pieContentDomId}",data:[],heigth:250,swf:"Pie2D",dim:'counts',hasLink:true},{domId:"${lineContentDomId}",data:[],heigth:250,swf:"Line",dim:'jlrv',hasLink:false}]});
+</script>

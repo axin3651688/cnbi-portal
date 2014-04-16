@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="Shortcut Icon" href="${resourcePath}images/sys/${pageBean.favicon}.ico"type="image/x-icon" />
+<title>${pageBean.sname}</title>
+<link href="${bootstrapPath}css/bootstrap.css" rel="stylesheet">
+<link href="${resourcePath}css/common/nav.css" rel="stylesheet">
+<!--[if IE]>
+<script type="text/javascript" src="${resourcePath}js/html5.js"></script>
+<![endif]-->
+#parse("common/jquery.vm")
+</head>
+#macro(createNav $navList $pageBean)
+	<ul class="nav navbar-nav">
+	#foreach($menu in ${navList})
+			#set($class = "")
+			#set($href = ${nav}+${menu.scode})
+			#if($menu.isactive == 1)
+				#set($class = "active")
+			#elseif($menu.scode == '4')
+				#set($class = "disabled")
+				#set($href = 'javascript:;')
+			#end
+		#if($menu.isleaf == 1 && $menu.spcode == 0)
+			<li  class="${class}" scode="${menu.scode}"><a href="${nav}${menu.scode}" target="_self">${menu.sname}</a></li>
+		#elseif($menu.isleaf == 0 )
+    	   <li class="dropdown" disabled=true><a href="javascript:;" class="dropdown-toggle"data-toggle="dropdown">$menu.sname <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+						 #foreach($item in ${navList})
+					  	        #if($item.spcode == $menu.scode)
+							     <li scode="${item.scode}"><a href="${nav}${item.scode}" target="_self">${item.sname}</a></li>
+					            #end
+						 #end
+                </ul>
+           </li>
+		#end	
+	   
+	#end
+    </ul>
+#end	
+<body>
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		  <div class="container" id="header"> 
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">中国经邦</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="javascript:;">
+				##  合肥山羊智能财务管控系统
+				   <img alt="" src="${resourcePath}images/sys/logo.png" width=282 height=30> 
+				</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				 #createNav($navList $pageBean)
+				
+				#*	#foreach($menu in ${navList})
+						#set($class = "")
+						#set($href = ${nav}+${menu.scode})
+						#if($menu.isactive == 1)
+							#set($class = "active")
+						#elseif($menu.scode == '4')
+							#set($class = "disabled")
+							#set($href = 'javascript:;')
+						#end
+					   <li  class="${class}" scode="${menu.scode}"><a href="${href}" target="_self">${menu.sname}</a></li>
+					#end
+    				<li class="dropdown" disabled=true><a href="javascript:;" class="dropdown-toggle"data-toggle="dropdown">$moreNav.sname <b class="caret"></b></a>
+    						<ul class="dropdown-menu">
+    						 #foreach($item in ${list})
+    					  	        #if($item.spcode == "2")
+    							     <li scode="${item.scode}"><a href="${nav}${item.scode}" target="_self">${item.sname}</a></li>
+    					            #end
+    						 #end
+                        </ul>
+                        </li>
+				   *#		
+
+			</div>
+	</div>
+    
+	
+	 </div>
+	  #if($pageBean.scode != "1")
+    	<ul class="breadcrumb container">
+    	  <li class="" style="margin-left:10px;"><i class="glyphicon glyphicon-home"></i>&nbsp;当前位置：</li>
+    	  #if($pageBean.scode == "1")
+    	  #else
+    		  <li><a href="${nav}1">首页</a></li>
+		  #end
+		  #set($tName = $pageBean.sname)
+		  #if($pageBean.scode == "21"|| $pageBean.scode == "22")
+			  #set($tName = "销售财务>>"+$tName)
+		  #end	
+		  #*
+		  #if($pageBean.scode == "2")##模型模块
+		        #set($text = '内销')
+			    #set($isActiveDash = $session.getAttribute("isActiveDash"))##获取活动模型
+				#if($isActiveDash.spcode == '2')
+					 #set($text = '外销')
+				#else
+				#end	
+				#set($text = $text+'>>'+$isActiveDash.sname)
+				#set($tName = $pageBean.sname+'>>'+$text)	
+		  #end	
+		 
+		  <li class="pull-right">##<!-- table>tr.item$*5>td.main$2>a{测试 $} -->
+			 #createSelect('year')
+			 #createSelect('month')
+			 #createSelect('unit')
+          </li>
+		   *#
+    	  <li  #if($pageBean.scode == '2') scode="${isActiveDash.scode}" sname="${isActiveDash.sname}" isleaf="${isActiveDash.isleaf}" spcode="${isActiveDash.spcode}" #else scode="${pageBean.scode}"#end class="active" href="${nav}${pageBean.scode}">$tName</li>
+    	 <li class="pull-right" style="margin-right:10px;"><i class="glyphicon glyphicon-cog"></i>&nbsp;当前数据维度：<a title="点击可修改当前数据维度" href="#"data-target="#dimChange" data-toggle="modal"><span class="liSpan">期间：</span ><span id="yearId">2013</span> 年<span id="monthId">12</span> 月份&nbsp<span class="liSpan">单位：</span><span id="unitId">万元</span> </a></li>
+       </ul>
+	 #end
+<!-- JiaThis Button BEGIN -->
+ <script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?uid=1356084986632651&move=0" charset="utf-8"></script>
+<!-- JiaThis Button END -->

@@ -1,0 +1,11 @@
+<div class="col-md-1">##data-spy="affix" data-offset-top="200"
+            <div  class="affix list-group">
+				#foreach($bean in $dashList)
+				   <a href="javascript:;" subject="$bean.subject"  isactive="$bean.isactive" sname="$bean.sname" scode="$bean.scode" isleaf="$bean.isleaf" spcode="$bean.spcode" class="list-group-item #if($bean.isactive ==1)active #end">$bean.sname</a>
+				#end	
+            </div>	
+        </div>
+	     <div class="col-md-11" id="dashContent">
+		</div>
+<script src="${resourcePath}js/dash.js"></script>	##resourcePath	
+#parse("common/chart.vm")

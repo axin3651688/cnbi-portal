@@ -1,0 +1,12 @@
+<style >
+	#top5:hover{background:url(${resourcePath}images/test/toped.png) repeat scroll 0% 0% transparent;}
+	#top5{background: url(${resourcePath}images/test/top.png) repeat scroll 0% 0% transparent;}
+	#dim:hover{background:url(${resourcePath}images/test/sina.png) repeat scroll 0% 0% transparent;}
+    #dim{background: url(${resourcePath}images/test/sina.png) repeat scroll 0% 0% transparent;}
+</style>
+<div class="top5">
+	<ul id="jump">
+		<li style="display:none;" title="点这儿可回到顶部哦！亲！"><a id="top5" href="#top5"></a></li>
+		 <li style="height:50px"  title="点这儿可到达SQL语句查询测试页面！"><a id="dim" rel="nofollow" href="${basePath}query.cnbi" target="_blank"></a></li>
+	</ul>
+</div>

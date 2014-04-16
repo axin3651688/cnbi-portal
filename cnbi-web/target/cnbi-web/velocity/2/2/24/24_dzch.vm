@@ -1,0 +1,109 @@
+#set($dataList = $viewDatas)
+#parse("common/dzchDimChange.vm")
+#foreach($title in $dataList)
+    #if($title.dim.scode == "dzch_reseCate" || $title.dim.scode == "dzch_category")
+    <div class="row">
+    	#set($pieContentDomId= 'zkcpieId')
+    	#set($pieContent="<div id=${pieContentDomId}></div>")
+    	<div class="col-md-4">
+            #createCommonPanel($panelCss 'asterisk' '总库存' $pieContent)
+        </div>
+    	#set($pie1ContentDomId= 'zpkupieId')
+    	#set($pie1Content="<div id=${pie1ContentDomId}></div>")
+    	<div class="col-md-4">
+            #createCommonPanel($panelCss 'asterisk' '正品库存' $pie1Content)
+        </div>
+    	 #set($lineContentDomId= 'zpkclineId')
+    	  #set($lineContent="<div id=${lineContentDomId}></div>")
+        <div class="col-md-4">
+    		#createCommonPanel($panelCss 'tree-deciduous' "正品库存" $lineContent)
+        </div>
+	</div>
+	#end
+#end
+<style >
+	 .rowspanLh{
+	   line-height:20px;
+	 };
+</style> 
+<div>
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>库存表</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
+				<thead >
+					 <tr>
+						#foreach($title in $dataList)
+                            #if($title.dim.scode == "dzch_reseCate"||$title.dim.scode == "dzch_resemodel"
+								||$title.dim.scode == "dzch_cusmodel"||$title.dim.scode == "dzch_salemodel")
+                                <td rowspan="2" align=center>$title.dim.sname</td>
+        						<td rowspan="2" align=center>$title.dim.field</td>
+							#end
+						#end
+                        <td rowspan="2" align=center>总库存</td>
+                        <td colspan="5" align=center>正品库存</td>
+                        <td rowspan="2" >残次库存</td>
+                        <td colspan="4" align=center>占比</td>
+                        <td colspan="4" align=center>环比</td>
+					</tr>
+                      <tr>
+                        <td>1个月内</td>
+                        <td>2-3个月</td>
+                        <td>4-6个月</td>
+                        <td>7-12个月</td>
+                        <td>一年以上</td>
+                        <td>3个月以内库存</td>
+                        <td>3-12个月库存</td>
+                        <td>一年以上库存</td>
+                        <td>残次</td>
+                        <td>3个月以内库存</td>
+                        <td>3-12个月库存</td>
+                        <td>一年以上库存</td>
+                        <td>残次</td>
+                      </tr>
+				</thead >
+				#foreach($data in $dataList)
+                    #if($data.dim.scode != "dzch_resemodel" && $data.dim.scode != "dzch_reseCate" &&
+						$data.dim.scode != "dzch_cusmodel" && $data.dim.scode != "dzch_salemodel")
+						#set($dim = $data.dim) 
+						#set($bean = $data.dzchDatas)
+						#foreach($obj in $bean)
+                        <tr>
+							#if($velocityCount == 1)
+								<th rowspan="$bean.size()">$dim.sname</th>
+							#end
+							<th>$obj.sname</th>
+    						<td>$numberTool.format('###,##0.00',$obj.zkc)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.yq_1)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.yq_2_3)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.yq_4_6)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.yq_7_12)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.yq_1y)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.cckc)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.zb_3)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.zb_3_12)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.zb_1y)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.zb_cckc)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.hb_3)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.hb_3_12)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.hb_1y)</td>
+    						<td>$numberTool.format('###,##0.00',$obj.hb_cckc)</td>
+						</tr>
+						#end
+					#end  
+				#end
+  			</table>
+        </div>
+    </div>
+</div>
+#foreach($title in $dataList)
+    #if($title.dim.scode == "dzch_reseCate" || $title.dim.scode == "dzch_category")
+	<script >
+        	new Cnbi.Page.Wx.Dzch_ReseCate({datas:$viewJsonDatas,viewChartArr:[
+        		{domId:"${pieContentDomId}",data:[],height:300,swf:"pie2D",dim:"zkc"},
+        		{domId:"${pie1ContentDomId}",data:[],height:300,swf:"Doughnut3D",dim:"zpkc"},
+        		{domId:"${lineContentDomId}",data:[],height:300,swf:"StackedColumn2D","dim":"stack"}
+		]});
+	</script>
+	#end
+#end

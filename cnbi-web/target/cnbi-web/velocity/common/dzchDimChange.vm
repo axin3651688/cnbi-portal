@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="container" style="padding-left:15px;">
+		<div class="${panelCss}">
+			<div class="panel-heading"><i class="glyphicon glyphicon-tree-deciduous">维度切换</i></div>
+			<div class="panel-body">
+				<div class="btn-group btn-group-justified">
+                    <button type="button" class="btn btn-default " style="width: 20%">
+						<a href="javascript:;" id="category" data-toggle="tooltip" data-placement="bottom" title="点击[品类]切换成【品类】"><code>品类</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 20%">
+						<a href="javascript:;" id="reseCate" data-toggle="tooltip" data-placement="bottom" title="点击[仓库与品类]切换成【仓库与品类】"><code>仓库&品类</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 20%">
+						<a href="javascript:;" id="resemodel" data-toggle="tooltip" data-placement="bottom" title="点击[仓库与型号]切换成【仓库与型号】"><code>仓库&型号</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 20%">
+						<a href="javascript:;" id="saleman" data-toggle="tooltip" data-placement="bottom" title="点击[客户与型号]切换成【客户与型号】"><code>客户&型号</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 20%">
+						<a href="javascript:;" id="customer" data-toggle="tooltip" data-placement="bottom" title="点击[业务员与型号]切换成【业务员与型号】"><code>业务员&型号</code></a></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${resourcePath}js/2/2/24/common.js"></script>

@@ -1,0 +1,61 @@
+<style>.rowspanLh{
+	  line-height:90px;
+	}</style>
+<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>产品<code>${sname}</code>指标分析表</div>
+        <div class="panel-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+      #*    <tr rowspan="2">
+           ## <th></th>
+            <th rowspan="2"><p class="text-center rowspanLh">项目<p></th>
+            <th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="right" title="点击可进入【全品牌】“渠道&品类”表数据">全品牌</a>	</th>
+            <th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="right" title="击可进入【三洋帝度】“渠道&品类”表数据">三洋帝度</a></th>
+			<th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="击可进入【三洋帝度】“渠道&品类”表数据">荣事达</a></th>
+          </tr>
+		  *#
+		  <tr>
+			<th>行次</th>
+            <th>项目</th>
+			<th >品牌</th>
+           	<th >合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">生活电器</th>
+          </tr>
+        </thead>
+        <tbody>
+			 #foreach($bean in $viewDatas)
+				<tr >
+					   <th rowspan="3"> <p class="text-center rowspanLh">$velocityCount</p></th>
+                       <th rowspan="3" title="$bean.sname" style="line-height:90px;">$bean.sname</th>
+				##全品牌 
+                        <th>全品牌</th>
+                   	    <td title="合计">$numberTool.format('###,##0.00',$bean.allTotal)</td>
+        				<td title="洗衣机">$numberTool.format('###,##0.00',$bean.allWasher)</td>
+						<td title="冰箱">$numberTool.format('###,##0.00',$bean.allIcebox)</td>
+						<td title="生活电器">$numberTool.format('###,##0.00',$bean.allLifeElectric)</td>
+				
+              
+				  </tr>
+                  <tr >
+				    ## 三洋帝度
+					 <td style="text-indent:25px;">三洋帝度</td>
+					 <td title="合计">$numberTool.format('###,##0.00',$bean.syddTotal)</td>
+                     <td  title="洗衣机">$numberTool.format('###,##0.00',$bean.syddWasher)</td>
+					 <td title="冰箱">$numberTool.format('###,##0.00',$bean.syddIcebox)</td>
+					 <td title="生活电器">$numberTool.format('###,##0.00',$bean.syddLifeElectric)</td>
+				  </tr>
+				  <tr >
+					  ##荣事达
+					  <td style="text-indent:25px;">荣事达</td>
+					<td title="合计">$numberTool.format('###,##0.00',$bean.rsdTotal)</td>
+                    <td title="洗衣机">$numberTool.format('###,##0.00',$bean.rsdWasher)</td>
+					<td title="冰箱">$numberTool.format('###,##0.00',$bean.rsdIcebox)</td>
+					<td title="生活电器">$numberTool.format('###,##0.00',$bean.rsdLifeElectric)</td>
+                  </tr>
+			 #end	
+  
+        </tbody>
+      </table>
+        </div>

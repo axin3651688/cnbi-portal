@@ -1,0 +1,157 @@
+#parse("common/slider.vm")
+##创建表格头函数
+#macro(createTableHeader $number)
+	<thead><tr>
+			<th>指标</th>
+			<th>考核值</th>
+			<th>达成值</th>
+	#if($number == '22')
+            <th>同比</th>
+	#end
+	<th>达成率</th>
+	<th title="当达成率大于0时为绿色,小于0时为红色">趋势</th>
+	</tr>	
+	</thead>
+#end
+#macro(createWin $scode)
+	 <!-- Modal -->
+<div class="modal fade" id="myModal${scode}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+#end	
+##创建表格函数
+#macro(createTable $modelList $num)
+	  <table class="table table-striped table-bordered">
+    		#createTableHeader($num)
+    		<tbody>
+    			#foreach($bean in $modelList)
+    			<tr>
+					#set($href = ${nav}+$num+'&nid='+${bean.scode})
+					#if($bean.scode == '121')
+						###createWin($bean.scode)
+						<div class="modal fade" id="myModal${bean.scode}"aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">利润类别</h4>
+                              </div>
+                              <div class="modal-body">
+                                <a href="${href}" class="btn btn-primary" >净$bean.sname</a>
+                                <a href="${nav}${num}&nid=122" class="btn btn-primary" >虚拟利润</a>
+                              </div>
+                            </div><!-- /.modal-content -->
+                          </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+						#set($href = "javascript:;")
+					#end	
+    			    <th #if($bean.scode == '121') data-toggle="modal" data-target="#myModal${bean.scode}" #end><a href="${href}" data-toggle="tooltip" data-placement="right" title="点击可进入【${bean.sname}】模型查看详情">${bean.sname}</a>	</th>
+        			<td>$numberTool.format('###,##0.00',$bean.examineValue)</td>
+        			<td>$numberTool.format('###,##0.00',$bean.reachValue)</td>
+                	#if($num == '22')
+						<td>$numberTool.format('###,##0.00',$bean.tqb)</td>
+                	#end
+                	<td>$numberTool.format('###,##0.00',$bean.reachPercent)%</td>
+                	 <td>$bean.qs()</td>
+    			  </tr>
+    			#end
+    		</tbody>
+    </table>
+#end
+<div class="container" style="width:1170px;">
+<ul class="nav nav-pills">
+		     #foreach($key in ${modelMap.keySet()})  
+				   #set($tc = "")
+				   #if($velocityCount == 1)
+				   	  #set($tc = "active")
+				   #else  	   
+					  #set($tc = "") 
+				   #end	
+				   	<li class="$tc" ><a href="#nav${key.scode}" scode="nav${key.scode}" data-toggle="tab">${key.sname}</a></li> 
+             #end  
+ </ul>
+<div class="tab-content">
+				 #foreach($key in ${modelMap.keySet()})
+					   #set($tc = "")
+    				   #if($velocityCount == 1)
+    				   	  #set($tc = "active")
+    				   #else  	   
+    					  #set($tc = "") 
+					   #end
+					   #set($modelList = ${modelMap.get($key)}) 	
+					 <div class="#if($velocityCount == 1) active in #end row tab-pane" id="nav${key.scode}" style="margin-top:10px;">
+						 #set($num = $key.scode)
+						 ##if($num == 1)
+						      <div class="${panelCss} col-md-3 noborder">
+                    			<div>
+                    				<div class="${panelCss}">
+                    					 <div class="panel-heading">$modelList.get(0).sname</div>
+                    					<div class="panel-body" id="$modelList.get(0).scode">
+                    						## <div id="xl_Ang"> </div>
+                    						
+                    					</div>
+                    				</div>
+                    				<div class="${panelCss}">
+                    					 <div class="panel-heading">$modelList.get(1).sname</div>
+                    					<div class="panel-body" id="$modelList.get(1).scode">
+                    						## <div id="xssr_Ang"> </div>
+                    					</div>
+                    				</div>
+                    				<div class="${panelCss}" style="margin-bottom: 0px">
+                    				 <div class="panel-heading">$modelList.get(2).sname</div>
+                    					<div class="panel-body" id="$modelList.get(2).scode">
+                    						##<div id="lr_Ang"> </div>
+                    					</div>
+                    				</div>
+                    			</div>
+                    		</div>
+                    		<div class="${panelCss} col-md-6 noborder" style="padding-left:3px;padding-right:3px;">
+                    			<div>
+                    				<div class="${panelCss}" style="margin-bottom: 0px;">
+                    					<div class="panel-heading">重要指标达成率情况雷达图</div>
+                    					<div class="panel-body" id="radarId${num}">
+                    					</div>
+                    				</div>
+                    			</div>
+                    		</div>
+                    		<div class="${panelCss} col-md-3 noborder">
+                    			<div>
+                    				<div class="${panelCss}">
+                    					<div class="panel-heading">$modelList.get(3).sname</div>
+                    					<div class="panel-body">
+                    						 <div id="$modelList.get(3).scode"> </div>
+                    						
+                    					</div>
+                    				</div>
+                    				<div class="${panelCss}" style="margin-bottom: 0px">
+                    					<div class="panel-heading">$modelList.get(4).sname</div>
+                    					<div class="panel-body">
+                    						<div id="$modelList.get(4).scode"> </div>
+                    					</div>
+                    				</div>
+                    			</div>
+                    		</div>  
+						 ##end
+						 #createTable($modelList $key.scode)
+                     </div>
+				 #end	
+</div>	
+</div>
+<script >
+  var  jsonData = ${modelMapJson}
+</script>
+#parse("common/chart.vm")

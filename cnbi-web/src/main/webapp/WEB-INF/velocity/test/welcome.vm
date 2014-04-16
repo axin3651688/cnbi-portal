@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>WelcomePage</title>
+</head>
+<body>
+#parse("common/common.vm")
+Welcome to Velocity Page .
+<div >
+	  $request
+	  <hr>
+	  $response
+	   <hr>
+	  $session
+	   <hr>
+		$springMacroRequestContext
+		<hr>
+			$rc
+		<hr>
+		$pageContext.request.contextPath
+	 <hr/>
+</div>
+<div>
+	$path
+</div>
+<div>
+	$basePath
+</div>
+<div>
+	$msg
+</div>
+<div>
+	写死的字
+</div>
+
+</body>
+</html>

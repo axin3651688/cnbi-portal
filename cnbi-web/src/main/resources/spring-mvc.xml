@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache-3.2.xsd  
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+	<context:property-placeholder location="classpath:properties/jdbc.properties" />
+	<!-- 配置不拦截静态文件 -->
+	<mvc:default-servlet-handler />
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${jdbc.driverclassname}" />
+		<property name="filters" value="${filters}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="minIdle" value="${minIdle}" />
+
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<!-- <property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" 
+			/> -->
+		<property name="removeAbandoned" value="${removeAbandoned}" /> <!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" /> <!-- 1800秒，也就是30分钟 -->
+		<property name="logAbandoned" value="${logAbandoned}" /> <!-- 关闭abanded连接时输出错误日志 -->
+	</bean>
+	<!-- 配置Jdbc模板 -->
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+
+    <!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
+	<!-- 通过AOP配置提供事务增强，让service包下所有Bean的所有方法拥有事务 -->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="serviceMethod" expression=" execution(* org.cnbi.service..*(..))"/>
+		<aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice" />
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" />
+			<tx:method name="update*" />
+			<tx:method name="del*" />
+			<tx:method name="query" />
+		</tx:attributes>
+	</tx:advice>
+
+
+
+
+	<!-- 扫描类包，将标注Spring注解的类自动转化Bean，同时完成Bean的注入 -->
+	<context:component-scan base-package="org.cnbi.*" />
+	
+	<!-- 3.2.3专用配制 -->
+	<mvc:annotation-driven  content-negotiation-manager="contentNegotiationManager" />
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="false" />
+		<property name="favorParameter" value="false" />
+		<property name="ignoreAcceptHeader" value="false" />
+		<property name="mediaTypes">
+			<value>
+				json=application/json
+				atom=application/atom+xml
+				html=text/html
+				*=*/*
+			</value>
+		</property>
+	</bean>
+	
+	
+	<!--缓存配置satrt-->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache" />
+	</bean>
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:xml/ehcache.xml"/>
+		<property name="shared" value="true" />
+	</bean>
+	<!-- 缓存配置end-->
+	
+    <bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="properties/views"></property>
+		<!-- <property name="order" value="0"></property> properties/views-->
+	</bean>
+	
+	
+
+	<!-- jsp视图解析器 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- velocity视图解析器 -->
+	<bean id="velocityViewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="cache" value="true" />
+		<property name="prefix" value="/" />
+		<property name="exposeRequestAttributes" value="false" /><!-- 
+			暴露request属性 -->
+		<property name="requestContextAttribute" value="request" /><!--request属性引用名称 -->
+		<property name="suffix" value=".vm" />
+	</bean>
+
+	<!-- velocity环境配置 -->
+	<bean id="velocityConfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<!-- velocity模板路径 -->
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
+		<!-- velocity配置文件路径 -->
+		<!-- <property name="configLocation" value="/WEB-INF/velocity.properties"/> -->
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+				<prop key="contentType">text/html;charset=UTF-8</prop>
+				<prop key="file.resource.loader.cache">false</prop>
+				<prop key="file.resource.loader.modificationCheckInterval">1</prop>
+				<prop key="velocimacro.library.autoreload">true</prop>
+				<prop key="velocimacro.library">macro.vm</prop>
+				
+			</props>
+		</property>
+
+	</bean>
+
+ 
+	<!-- view配制结束 -->
+    <!-- 异常处理类start.................... -->
+	<bean id="exceptionHandler"  class="org.cnbi.web.exception.MyExceptionHandler" />
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="500"></property>   <!-- 默认为500，系统错误(error.jsp) -->
+		<property name="defaultStatusCode" value="404"></property>
+		<property name="statusCodes"><!-- 配置多个statusCode -->
+			<props>
+				 <prop key="common/error">500</prop>    
+                 <prop key="common/404">404</prop>    
+			</props>
+		</property>
+		<property name="exceptionMappings">
+			<props>
+				<!-- 这里你可以根据需要定义N多个错误异常转发 -->
+				<prop key="org.cnbi.utils.exception.BusinessException">error</prop>
+				<prop key="java.sql.SQLException">dbError</prop> <!-- 数据库错误(dbError.jsp) -->
+				<prop key="org.springframework.web.bind.ServletRequestBindingException">bizError</prop> <!-- 参数绑定错误(如：必须参数没传递)(bizError.jsp) -->
+				<prop key="java.lang.IllegalArgumentException">bizError</prop>  <!-- 参数错误(bizError.jsp) -->
+				<prop key="org.springframework.validation.BindException">bizError</prop>  <!-- 参数类型有误(bizError.jsp) -->
+				<prop key="java.lang.Exception">unknowError</prop>  <!-- 其他错误为'未定义错误'(unknowError.jsp) -->
+			</props>
+		</property>
+	</bean>
+	<!-- 异常处理配置end......................-->
+
+	
+	<!-- 自定义拦截链配置 -->
+	<mvc:interceptors>
+	    <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**"/>  
+			<bean class="org.cnbi.web.interceptors.LicenseInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="org.cnbi.web.interceptors.EncodingInterceptor">
+			   <property name="encoding" value="UTF-8"></property>
+			</bean>
+		</mvc:interceptor>
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**"/>  
+			<bean class="org.cnbi.web.interceptors.AuthInterceptor">
+				<property name="excludeUrls">排除  excludeUrls
+					<list>
+						<value>login.cnbi</value>
+						<value>loginOut.cnbi</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor> -->
+	</mvc:interceptors>
+	
+	
+	<!-- 文件上传配制 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="maxUploadSize" value="10485760000" />
+		<property name="maxInMemorySize" value="40960" />
+	</bean>
+</beans>

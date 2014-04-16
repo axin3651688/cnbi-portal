@@ -1,0 +1,67 @@
+<style>.rowspanLh{
+	  line-height:30px;
+	}</style>
+<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>产品<code>${sname}</code>指标分析表</div>
+        <div class="panel-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr rowspan="2">
+           ## <th></th>
+            <th rowspan="2"><p class="text-center rowspanLh">项目<p></th>
+            <th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="right" title="点击可进入【全品牌】“渠道&品类”表数据">全品牌</a>	</th>
+            <th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="right" title="击可进入【三洋帝度】“渠道&品类”表数据">三洋帝度</a></th>
+			<th colspan="4"><a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="击可进入【三洋帝度】“渠道&品类”表数据">荣事达</a></th>
+          </tr>
+		  <tr>
+            <th>合计</th>
+           	<th>洗衣机</th>
+			<th title="生活电器">生活电器</th>
+			<th>冰箱</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th title="生活电器">生活电器</th>
+			<th>冰箱</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th title="生活电器">生活电器</th>
+			<th>冰箱</th>
+          </tr>
+        </thead>
+        <tbody>
+			 #foreach($bean in $viewDatas)
+				##if($velocityCount == 1)
+					#*	private double allTotal;
+					    private double allWasher;
+                    	private double allIcebox;
+                    	private double allLifeElectric;
+						
+						 *  合计, Total
+						          洗衣机, Washer
+                         *  冰箱,  Icebox
+                         *  生活电器,LifeElectric
+                       
+					*#	
+				  <tr>
+					<th title="$bean.sname">$bean.sname</th>
+					##全品牌
+                   	    <td>$numberTool.format('###,##0.00',$bean.allTotal)</td>
+        				<td>$numberTool.format('###,##0.00',$bean.allWasher)</td>
+						<td>$numberTool.format('###,##0.00',$bean.allIcebox)</td>
+						<td>$numberTool.format('###,##0.00',$bean.allLifeElectric)</td>
+					## 三洋帝度
+					 <td>$numberTool.format('###,##0.00',$bean.syddTotal)</td>
+                     <td>$numberTool.format('###,##0.00',$bean.syddWasher)</td>
+					<td>$numberTool.format('###,##0.00',$bean.syddIcebox)</td>
+					<td>$numberTool.format('###,##0.00',$bean.syddLifeElectric)</td>
+                	##荣事达	
+					 <td>$numberTool.format('###,##0.00',$bean.rsdTotal)</td>
+                     <td>$numberTool.format('###,##0.00',$bean.rsdWasher)</td>
+					<td>$numberTool.format('###,##0.00',$bean.rsdIcebox)</td>
+					<td>$numberTool.format('###,##0.00',$bean.rsdLifeElectric)</td>
+				  </tr>	
+			 #end	
+  
+        </tbody>
+      </table>
+        </div>

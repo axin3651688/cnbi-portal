@@ -1,0 +1,86 @@
+<style>.rowspanLh{line-height:30px;}</style>
+<div class="container">
+<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>&nbsp;&nbsp;虚拟利润<code>${currentpagetip}</code>指标分析表</div>
+        <div class="panel-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr rowspan="2">
+           ## <th></th>
+            <th rowspan="2"><p class="text-center rowspanLh">项目<p></th>
+            <th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0001_Region',text:'北区',level:${paramBean.level},url:'qdpl_dqpl_company',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【北区】>>${nextpagedimtip}表数据">北区</a>	
+			</th>
+            <th colspan="4">
+			   <a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0002_Region',text:'中区',level:${paramBean.level},url:'qdpl_dqpl_company',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【中区】>>${nextpagedimtip}表数据">中区</a>	
+			</th>
+			<th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0003_Region',text:'南区',level:${paramBean.level},url:'qdpl_dqpl_company',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【南区】>>${nextpagedimtip}表数据">南区</a>	
+			</th>
+			<th colspan="4">
+				<a href="javascript:levelNav({id:'${paramBean.dimarrstr}~0004_Region',text:'总部',level:${paramBean.level},url:'qdpl_dqpl_company',nextpagedimtip:'${nextpagedimtip}'});"data-toggle="tooltip" data-placement="right" title="点击可进入【总部】>>${nextpagedimtip}表数据">总部</a>	
+			</th>
+          </tr>
+		  <tr>
+            <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			 <th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			<th>合计</th>
+           	<th>洗衣机</th>
+			<th>冰箱</th>
+			<th title="生活电器">电器</th>
+			
+          </tr>
+        </thead>
+        <tbody>
+			 #foreach($bean in $viewDatas)
+				##if($velocityCount == 1)
+					#*	private double allTotal;
+					    private double allWasher;
+                    	private double allIcebox;
+                    	private double allLifeElectric;
+						
+						 *  合计, Total
+						          洗衣机, Washer
+                         *  冰箱,  Icebox
+                         *  生活电器,LifeElectric
+                       
+					*#	
+				  <tr>
+					<th title="$bean.get("sname")">$bean.get("sname")</th>
+					##代理
+                   	    <td>#isnull($bean.get("northRegionTotal"))</td>
+						<td>#isnull($bean.get("northRegionWasher"))</td>
+						<td>#isnull($bean.get("northRegionIcebox"))</td>
+						<td>#isnull($bean.get("northRegionLifeElectric"))</td>
+        		   ## 连锁
+				        <td>#isnull($bean.get("middleRegionTotal"))</td>
+						<td>#isnull($bean.get("middleRegionWasher"))</td>
+						<td>#isnull($bean.get("middleRegionIcebox"))</td>
+						<td>#isnull($bean.get("middleRegionLifeElectric"))</td>
+				   ##电商	
+					    <td>#isnull($bean.get("southRegionTotal"))</td>
+						<td>#isnull($bean.get("southRegionWasher"))</td>
+						<td>#isnull($bean.get("southRegionIcebox"))</td>
+						<td>#isnull($bean.get("southRegionLifeElectric"))</td>
+				    ##总部	
+					    <td>#isnull($bean.get("totalRegionTotal"))</td>
+						<td>#isnull($bean.get("totalRegionWasher"))</td>
+						<td>#isnull($bean.get("totalRegionIcebox"))</td>
+						<td>#isnull($bean.get("totalRegionLifeElectric"))</td>
+				 </tr>	
+			 #end	
+        </tbody>
+      </table>
+        </div>
+ </div>		
+        </div>

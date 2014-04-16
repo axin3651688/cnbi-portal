@@ -1,0 +1,45 @@
+##<h3 id="panels-heading">利润 >> 净利润</h3>
+   ## <p>用<code>.panel-heading</code>可以简单地加入一个标题容器。您也可以用<code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>和<code>.panel-title</code>类加入预定义样式的标题。</p>
+<style >
+	 .rowspanLh{
+	   line-height:120px;
+	 }
+</style>    
+	 <div class="container" style="padding-left:15px;">
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>${sname}<code>业务员与品类</code>分析表</div>
+        <div class="panel-body">
+                <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>业务员</th>
+            <th>品类</th>
+            <th>数量(件)</th>
+            <th>销售收入(万元)</th>
+			<th>${sname}额(万元)</th>
+			<th>${sname}率(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+		  #foreach($bean in $viewDatas)
+			#set($dim = $bean.dim)
+			#foreach($row in $bean.datas)
+				<tr>
+				#if($velocityCount == 1)
+				  <th rowspan="4">
+					<p class="text-center rowspanLh">${dim.sname}</p>
+			      </th>
+				#end
+				  <th>${row.sname}</th>
+				  <td>$numberTool.format('###,##0',${row.counts})</td>
+				  <td>$numberTool.format('###,##0.00',${row.xssr})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlre})</td>
+				  <td>$numberTool.format('###,##0.00',${row.jlrv})%</td>
+				</tr>	
+			#end
+		  #end	
+        </tbody>
+      </table>
+        </div>
+      </div>
+	  </div>

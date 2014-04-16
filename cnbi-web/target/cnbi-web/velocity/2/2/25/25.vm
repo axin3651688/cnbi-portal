@@ -1,0 +1,75 @@
+#parse("common/yqysDimChange.vm")
+#foreach($dataList in $viewDatas)
+	#set($data =$dataList.getYqysDatas())
+	#set($dim =$dataList.getDim())
+#end
+<style >
+	 .rowspanLh{
+	   line-height:20px;
+	 };
+</style> 
+<div class="row">
+	#set($pieContentDomId= 'pie1Id')
+	#set($pieContent="<div id=${pieContentDomId}></div>")
+	<div class="col-md-6">
+        #createCommonPanel($panelCss 'asterisk' '应收余额' $pieContent)
+    </div>
+	
+	 #set($lineContentDomId= 'line1Id')
+	  #set($lineContent="<div id=${lineContentDomId}></div>")
+    <div class="col-md-6">
+		#createCommonPanel($panelCss 'tree-deciduous' "逾期应收结构图" $lineContent)
+    </div>
+</div>
+<div>
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>&nbsp; $dim.sname &nbsp;应收指标分析表</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
+				<thead >
+					 <tr>
+                        <td rowspan="2" align="center">$dim.sname</td>
+                        <td rowspan="2" align="center"><a href="javascript:;" class="clickToChart" id="ysye" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【应收余额】数据">应收余额</a></td>
+                        <td rowspan="2" align="center"><a href="javascript:;" class="clickToChart" id="wyqys" data-toggle="tooltip" data-placement="bottom" title="点击可把饼图切换成【未逾期应收】数据">未逾期应收</a></td>
+                        <td colspan="5" align="center">逾期应收</td>
+                        <td colspan="2" align="center">与上月环比</td>
+                        <td colspan="2" align="center">与上年年底同比</td>
+					</tr>
+                      <tr>
+                        <td>1月内</td>
+                        <td>2-3个月</td>
+                        <td>4-6个月</td>
+                        <td>7-12个月</td>
+                        <td>1年以上</td>
+                        <td>应收余额</td>
+                        <td>逾期应收</td>
+                        <td>应收余额</td>
+                        <td>逾期应收</td>
+                      </tr>
+				</thead >
+				#foreach($bean in $data)
+					<tr>
+						<td>$bean.sname</td>
+						<td>$numberTool.format('###,##0.00',$bean.ysye)</td>
+						<td>$numberTool.format('###,##0.00',$bean.wyqys)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_1)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_2_3)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_4_6)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_7_12)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_1y)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_ysye)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_yqys)</td>
+						<td>$numberTool.format('###,##0.00',$bean.tb_ysye)</td>
+						<td>$numberTool.format('###,##0.00',$bean.tb_yqys)</td>
+					</tr>
+				#end
+  			</table>
+        </div>
+    </div>
+</div>
+<script >
+	new Cnbi.Page.Wx.Yqys_Depart({datas:$viewJsonDatas,viewChartArr:[
+		{domId:"${pieContentDomId}",data:[],height:300,swf:"Doughnut3D",dim:"ysye"},
+		{domId:"${lineContentDomId}",data:[],height:300,swf:"StackedColumn2D","dim":"stack"}
+	]});
+</script>

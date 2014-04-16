@@ -1,0 +1,59 @@
+<style>.rowspanLh{
+	  line-height:30px;
+	}</style>
+	<div class="container">
+   
+<div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>虚拟利润<code>${currentpagetip}</code>指标分析表</div>
+        <div class="panel-body">
+         <table class="table table-bordered table-striped">
+            <thead>
+              <tr rowspan="2">
+               ## <th></th>
+                <th rowspan="2"><p class="text-center rowspanLh">$parenttip<p></th>
+                <th colspan="4">溢价</th>
+    			<th colspan="4">承包</th>
+    			<th colspan="4">利润</th>
+              </tr>
+    		  <tr>
+                <th>合计</th>
+               	<th>洗衣机</th>
+    			<th title="生活电器">生活电器</th>
+    			<th>冰箱</th>
+    			 <th>合计</th>
+               	<th>洗衣机</th>
+    			<th title="生活电器">生活电器</th>
+    			<th>冰箱</th>
+    			 <th>合计</th>
+               	<th>洗衣机</th>
+    			<th title="生活电器">生活电器</th>
+    			<th>冰箱</th>
+              </tr>
+            </thead>
+            <tbody>
+    			 #foreach($bean in $viewDatas)
+    				  <tr>
+    					<th title="$bean.get("sname")"><a href="javascript:levelNav({id:'${paramBean.dimarrstr}~$bean.get("scode")_Branch',text:'$bean.get("sname")',level:${paramBean.level},url:'qdpl_dqpl_company_item',nextpagedimtip:'${nextpagedimtip}'});" data-toggle="tooltip" data-placement="right" title="点击可进入【$bean.get("sname")】${nextpagedimtip}表数据">$bean.get("sname")</a></th>
+    					##溢价
+                       	    <td>#isnull($bean.get("yjTotal"))</td>
+    						<td>#isnull($bean.get("yjWasher"))</td>
+    						<td>#isnull($bean.get("yjIcebox"))</td>
+    						<td>#isnull($bean.get("yjLifeElectric"))</td>
+    					##承包
+        					<td>#isnull($bean.get("cbTotal"))</td>
+    						<td>#isnull($bean.get("cbWasher"))</td>
+    						<td>#isnull($bean.get("cbIcebox"))</td>
+    						<td>#isnull($bean.get("cbLifeElectric"))</td>
+                    	##利润	
+        					<td>#isnull($bean.get("lrTotal"))</td>
+    						<td>#isnull($bean.get("lrWasher"))</td>
+    						<td>#isnull($bean.get("lrIcebox"))</td>
+    						<td>#isnull($bean.get("lrLifeElectric"))</td>
+    				  </tr>	
+    			 #end	
+      
+            </tbody>
+      </table>
+	  </div>
+</div>
+ </div>

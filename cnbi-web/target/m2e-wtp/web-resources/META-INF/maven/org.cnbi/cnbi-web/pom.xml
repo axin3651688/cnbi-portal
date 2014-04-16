@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cnbi</groupId>
+		<artifactId>cnbi-portal</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<!-- <relativePath></relativePath> -->
+	</parent>
+	<groupId>org.cnbi</groupId>
+	<artifactId>cnbi-web</artifactId>
+	<packaging>war</packaging>
+	<name>WEB模块</name>
+	<properties>
+		<pro.outerDirectory>src/main/webapp</pro.outerDirectory>
+		<servlet.version>3.1-b02</servlet.version>
+	</properties>
+	<dependencies>
+	<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cnbi</groupId>
+			<artifactId>cnbi-service</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.apache.tomcat</groupId> <artifactId>tomcat-dbcp</artifactId> 
+			<version>7.0.42</version> </dependency> -->
+		<!-- <dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency> -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io </artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-tools</artifactId>
+            <version>2.0</version>
+        </dependency>
+	</dependencies>
+	<!-- package阶段把jar包放WEB-INF/lib下面便于与eclipse联合使用 -->
+
+	<build>
+		<finalName>cnbi-web</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<outputDirectory>${pro.outerDirectory}/WEB-INF/lib</outputDirectory>
+				</configuration>
+				<!-- <configuration> <source>1.6</source> <target>1.6</target> <encoding>UTF-8</encoding> 
+					<compilerArguments> <extdirs>src\main\webapp\WEB-INF\lib</extdirs> </compilerArguments> 
+					</configuration> -->
+			</plugin>
+		</plugins>
+	</build>
+</project>

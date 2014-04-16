@@ -1,0 +1,88 @@
+#foreach($dataList in $viewDatas)
+	#set($data =$dataList.dzchDatas)
+	#set($dim =$dataList.getDim())
+#end
+#parse("common/dzchDimChange.vm")
+<style >
+	 .rowspanLh{
+	   line-height:20px;
+	 };
+</style> 
+<div class="row">
+	#set($pieContentDomId= $dim.scode+'pieId')
+	#set($pieContent="<div id=${pieContentDomId}></div>")
+	<div class="col-md-4">
+        #createCommonPanel($panelCss 'asterisk' '总库存' $pieContent)
+    </div>
+	#set($pie1ContentDomId= $dim.scode+'pie1Id')
+	#set($pie1Content="<div id=${pie1ContentDomId}></div>")
+	<div class="col-md-4">
+        #createCommonPanel($panelCss 'asterisk' '正品库存' $pie1Content)
+    </div>
+	 #set($lineContentDomId= $dim.scode+'lineId')
+	  #set($lineContent="<div id=${lineContentDomId}></div>")
+    <div class="col-md-4">
+		#createCommonPanel($panelCss 'tree-deciduous' "正品库存" $lineContent)
+    </div>
+</div>
+<div>
+	  <div class="${panelCss}">
+        <div class="panel-heading"><i class="glyphicon glyphicon-th"></i>&nbsp; $dim.sname &nbsp;库存表</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
+				<thead >
+					 <tr>
+                        <td rowspan="2">$dim.sname</td>
+                        <td rowspan="2" align=center>总库存</td>
+                        <td colspan="5" align=center>正品库存</td>
+                        <td rowspan="2" >残次库存</td>
+                        <td colspan="4" align=center>占比</td>
+                        <td colspan="4" align=center>环比</td>
+					</tr>
+                      <tr>
+                        <td>1个月内</td>
+                        <td>2-3个月</td>
+                        <td>4-6个月</td>
+                        <td>7-12个月</td>
+                        <td>一年以上</td>
+                        <td>3个月以内库存</td>
+                        <td>3-12个月库存</td>
+                        <td>一年以上库存</td>
+                        <td>残次</td>
+                        <td>3个月以内库存</td>
+                        <td>3-12个月库存</td>
+                        <td>一年以上库存</td>
+                        <td>残次</td>
+                      </tr>
+				</thead >
+				#foreach($bean in $data)
+					<tr>
+						<td>$bean.sname</td>
+						<td>$numberTool.format('###,##0.00',$bean.zkc)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_1)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_2_3)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_4_6)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_7_12)</td>
+						<td>$numberTool.format('###,##0.00',$bean.yq_1y)</td>
+						<td>$numberTool.format('###,##0.00',$bean.cckc)</td>
+						<td>$numberTool.format('###,##0.00',$bean.zb_3)</td>
+						<td>$numberTool.format('###,##0.00',$bean.zb_3_12)</td>
+						<td>$numberTool.format('###,##0.00',$bean.zb_1y)</td>
+						<td>$numberTool.format('###,##0.00',$bean.zb_cckc)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_3)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_3_12)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_1y)</td>
+						<td>$numberTool.format('###,##0.00',$bean.hb_cckc)</td>
+					</tr>
+				#end
+  			</table>
+        </div>
+    </div>
+</div>
+<script >
+	new Cnbi.Page.Wx.Dzch_Category({datas:$viewJsonDatas,viewChartArr:[
+		{domId:"${pieContentDomId}",data:[],height:300,swf:"pie2D",dim:"zkc"},
+		{domId:"${pie1ContentDomId}",data:[],height:300,swf:"Doughnut3D",dim:"zpkc"},
+		{domId:"${lineContentDomId}",data:[],height:300,swf:"StackedColumn2D","dim":"stack"}
+	]});
+</script>

@@ -1,0 +1,18 @@
+<div class="row">
+	<div class="container" style="padding-left:15px;">
+		<div class="${panelCss}">
+			<div class="panel-heading"><i class="glyphicon glyphicon-tree-deciduous">维度切换</i></div>
+			<div class="panel-body">
+				<div class="btn-group btn-group-justified">
+                    <button type="button" class="btn btn-default " style="width: 32%">
+						<a href="javascript:;" id="jppm" data-toggle="tooltip" data-placement="bottom" title="点击[竞品排名]切换成【竞品排名】"><code>竞品排名</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 35%">
+						<a href="javascript:;" id="ztck" data-toggle="tooltip" data-placement="bottom" title="点击[整体出口]切换成【整体出口】"><code>整体出口</code></a></button>
+					<button type="button" class="btn btn-default" style="width: 33%">
+						<a href="javascript:;" id="syck" data-toggle="tooltip" data-placement="bottom" title="点击[三洋出口]切换成【三洋出口】"><code>三洋出口</code></a></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${resourcePath}js/2/2/26/common.js"></script>

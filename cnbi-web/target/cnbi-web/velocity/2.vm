@@ -1,0 +1,50 @@
+<link href="${resourcePath}css/common/tree.css" rel="stylesheet">
+##创建模型左边的树的ul列表函数
+#macro(createUl $list $code )
+	#foreach($dash in $list)
+		#set($class = "")
+		#if($dash.isleaf == 0)##不是叶子  是父亲节点   
+			#set($class = "none")
+			<li scode="${dash.scode}" class="folder" sname="${dash.sname}" isleaf="${dash.isleaf}" spcode="${dash.spcode}"><a  class="${class}"><i class="glyphicon glyphicon-folder-open" ></i>&nbsp;$dash.sname</a></li>
+			<ul  class="nav " scode="${dash.scode}">
+				  #createUl($dash.children ${dash.scode})
+			</ul>	
+		#else   ##isactive
+		   #set($class = "dashModel")
+		    ##if($dash.isactive == $isActiveDash.isactive)
+			#if($dash.isactive == 1)	
+				  #set($class = "dashModel dashActive")
+			#end
+			 <li class="$class" #if(${dash.subject})subject="${dash.subject}" #end isactive="${dash.isactive}" sname="${dash.sname}" scode="${dash.scode}" isleaf="${dash.isleaf}" spcode="${dash.spcode}"><a href="javascript:;" class="model" >$dash.sname</a></li>
+		#end
+	#end	
+	#end
+	
+#macro(createDashPanel $dash ) ##squery
+	 <div class="panel panel-${css} disabled">
+              <div class="panel-heading treePanelHeader" ><i class="glyphicon glyphicon-tree-deciduous"></i>&nbsp;$dash.sname</div>
+              <div class="panel-body" >
+    			   #if($dash.children)
+    				<ul  class="nav" scode="${dash.scode}" #if($dash.squery) npid="$dash.squery" #end>
+    		            #createUl($dash.children $dash.scode)
+    				</ul>	
+    		        #end
+              </div>
+     </div>
+#end	
+##创建模型左边的树函数
+#macro(createDashTree $list )
+	#foreach($dash in $list)
+		 #createDashPanel($dash)
+	#end	
+#end
+##set($css =$!session.getAttribute("css") )
+##set($isActiveDash = $!session.getAttribute("isActiveDash"))
+<div class="col-md-2" id="dashTree">
+	#createDashTree($dashbean.children)
+</div> 
+<div class="col-md-10" id="dashContent">
+</div>
+#parse("common/chart.vm")
+#parse("common/mask.vm")
+ 

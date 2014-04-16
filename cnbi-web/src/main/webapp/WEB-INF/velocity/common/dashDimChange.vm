@@ -1,0 +1,29 @@
+#macro(createSelectDim $bean $list)##size="12"multiple="multiple"
+	<select  name="$bean.field" id="$bean.field" style="width:100%;" title="选择方式与excel的类似" >
+			#foreach($obj in ${list})
+			  <option value="${obj.scode}" view="${paramBean.view}" id="${paramBean.dimarrstr}~${obj.scode}_${bean.field}" #if($bean.scode == ${obj.scode}) selected=true #end>${obj.sname}</option>
+		  #end 	
+	</select>
+#end
+<div class="container">
+<div class="panel panel-${css}" style="maring-left:15px;maring-right:15px;">
+<div class="panel-heading" ><i class="glyphicon glyphicon-tree-deciduous"></i>&nbsp;维度切换</div>	
+<div class="panel-body " style="padding:10px!important;">
+  #set($col = 12/$dimMap.size())
+#foreach($key in $dimMap.keySet())
+	#set($list=$dimMap.get(${key}))
+	     <div class="col-md-${col}" style="padding-right:0px;padding-left:0px;">
+                <label for="$key.field" class="col-md-4 control-label" style="padding-right:0px;padding-left:10px;">$key.sname:</label>
+                <div class="col-md-8" style="margin-left:-8px;padding-right:0px;padding-left:0px;">
+					 #createSelectDim($key  $list)
+          </div>
+    </div>
+    ##<div class="col-md-2" name="$key">$name： #createSelect($key $list)</div>
+#end 
+</div>
+</div>
+</div>
+<script >
+ pageBean.dimArrAssign({dimMapJson:$dimMapJson,url:"${paramBean.view}",level:${paramBean.level},navnexttip:'${paramBean.navnexttip}'});
+</script>
+

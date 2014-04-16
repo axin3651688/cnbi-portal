@@ -1,0 +1,77 @@
+<script src="${bootstrapPath}js/bootstrap.min.js"></script>
+<script src="${resourcePath}js/${pageBean.scode}.js"></script>
+<div class="modal fade" id="userInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">当前用户【$suser.suser】信息</h4>
+      </div>
+      <div class="modal-body">
+		 <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="strueName" class="col-sm-2 control-label">真实姓名</label>
+                <div class="col-sm-10">
+                  <input type="text" disabled=true class="form-control" id="suser" name="suser" placeholder="请输入用户名称" required autofocus value="$suser.strueName">
+                </div>
+              </div>
+			  <div class="form-group">
+                <label for="dim_Company" class="col-sm-2 control-label">所属公司</label>
+                <div class="col-sm-10">
+                  <input type="text" disabled=true class="form-control" id="dim_Company" name="dim_Company" placeholder="请输入所属公司" required autofocus value="合肥三洋">
+                </div>
+              </div>
+			  <div class="form-group">
+                <label for="spassword" class="col-sm-2 control-label">密码</label>
+				<div class="col-sm-10">
+                 <input type="password" class="form-control" value="$suser.spassword" id="spassword"  placeholder="请输入用户密码" required autofocus>
+                </div>
+              </div>
+			   <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">确认密码</label>
+				<div class="col-sm-10">
+                 <input type="password" class="form-control" value="$suser.spassword" id="password"   placeholder="请输入用户密码" required autofocus>
+                </div>
+              </div>
+			  <div class="form-group">
+               <label for="sphone" class="col-sm-2 control-label">联系电话</label>
+                <div class="col-sm-10">
+                  <input type="sphone" disabled=true class="form-control" id="sphone" name="sphone" placeholder="Email" value="$suser.sphone">
+                </div>
+              </div>
+              <div class="form-group">
+               <label for="email" class="col-sm-2 control-label">邮件</label>
+                <div class="col-sm-10">
+                  <input type="email" disabled=true  class="form-control" id="email" name="semail" placeholder="Email" value="$suser.semail">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label>
+                      <input disabled=true type="checkbox"  #if($suser.cisadmin == 'Y')checked="checked"#end管理员>管理员
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                </div>
+              </div>
+    </form>
+      </div>
+     <!--  <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+      </div> -->
+    </div>
+  </div>
+</div>     
+<footer >
+	   <p class="text-center">技术支持：<a title="可进入公司官网" href="http://www.cnbisoft.com" target="_blank">上海经邦信息技术有限公司</a></p>
+       <p class="text-center"><i class="glyphicon glyphicon-user" title="当前用户"></i>：<a title="点击可修改当前用户【$suser.suser】的密码" href="#"  data-toggle="modal" data-target="#userInfo" >$suser.suser</a>
+	   #if($suser.cisadmin == 'N')非#end管理员&nbsp;&nbsp;<a title="点击可安全退出本系统" href="${ctx}out.cnbi">安全退出系统</a></p>
+       <p class="text-center">版权所有：合肥三洋 备案序号：沪ICP备10204375号 ©2008-<script type="text/javascript">var d=new Date();document.write(d.getFullYear());</script></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+#parse("common/common.vm")
+#parse("common/header.vm")
+#parse("common/dimChange.vm")
+<script>
+#parse("common/jsvar.vm")
+</script>
+<script src="${resourcePath}js/util.js"></script>
+##<script >Utils.register("Cnbi.Page"); </script>
+#parse("common/scroll.vm")
+<link href="${resourcePath}css/${pageBean.scode}.css" rel="stylesheet">
+<div class="container" id="content">
+	#parse("${pageBean.scode}.vm")
+	
+	#parse("common/footer.vm")
+</div>
+

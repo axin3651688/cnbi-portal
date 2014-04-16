@@ -1,0 +1,4 @@
+#set($cisadmin = $request.getSession().getAttribute('suser').cisadmin)
+#set($comID = $request.getSession().getAttribute('currentCompany').scode)
+#set($hasrightsM = $request.getSession().getAttribute('hasrightsM'))
+<script src="${bootstrapPath}js/bootstrap3-validation.js"></script>
